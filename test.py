@@ -22,3 +22,21 @@ classes = db.execute("SELECT * FROM Classes WHERE Code LIKE '__3%' OR Code LIKE 
 for c in classes:
     print(c)
 
+
+print("\n Is CS-y\n ")
+classes = db.execute("SELECT * FROM Classes WHERE IsCSy=1").fetchall()
+
+l="Relevent Courses: "
+for c in classes:
+    l=l+c["Name"]+", "
+
+l=l[:-2]
+
+print(l)
+
+
+lang = db.execute("SELECT Name FROM Skills WHERE Rating>1 AND (Type='Language' OR Type='Framework') ").fetchall()
+print(lang)
+
+misc = db.execute("SELECT NAME FROM Skills WHERE Rating>1 AND NOT (Type='Language' OR Type='Framework') ").fetchall()
+print(misc)
