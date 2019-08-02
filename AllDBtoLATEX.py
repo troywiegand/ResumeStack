@@ -9,40 +9,6 @@ def dict_factory(cursor, row):
 
 db = sqlite3.connect('./resume.db')
 db.row_factory = dict_factory
-# classes = db.execute("SELECT * FROM Classes").fetchall()
-
-# for c in classes:
-#     print(c)
-
-
-# print("\n\nALL UPPER LEVEL CLASSES \n")
-
-# classes = db.execute("SELECT * FROM Classes WHERE Code LIKE '__3%' OR Code LIKE '__4%'").fetchall()
-
-# for c in classes:
-#     print(c)
-
-
-# print("\n Is CS-y\n ")
-# classes = db.execute("SELECT * FROM Classes WHERE IsCSy=1").fetchall()
-
-# l="Relevent Courses: "
-# for c in classes:
-#     l=l+c["Name"]+", "
-
-# l=l[:-2]
-
-# print(l)
-
-
-# lang = db.execute("SELECT Name FROM Skills WHERE Rating>1 AND (Type='Language' OR Type='Framework') ").fetchall()
-# print(lang)
-
-# misc = db.execute("SELECT NAME FROM Skills WHERE Rating>1 AND NOT (Type='Language' OR Type='Framework') ").fetchall()
-# print(misc)
-
-
-
 def print_preamble():
 
     print("\\documentclass[letterpaper,11pt]{article}\n%-----------------------------------------------------------\n%Margin setup\n\n\\setlength{\\voffset}{0.1in}\n\\setlength{\\paperwidth}{8.5in}\n\\setlength{\\paperheight}{11in}\n\\setlength{\\headheight}{0in}\n\\setlength{\\headsep}{0in}\n\\setlength{\\textheight}{11in}\n\\setlength{\\textheight}{9.5in}\n\\setlength{\\topmargin}{-0.25in}\n\\setlength{\\textwidth}{7in}\n\\setlength{\\topskip}{0in}\n\\setlength{\\oddsidemargin}{-0.25in}\n\\setlength{\\evensidemargin}{-0.25in}\n%-----------------------------------------------------------")
@@ -66,7 +32,7 @@ def print_education():
         edustring=edustring+"\\item\n\\ressubheading{"+str(edu["School"])+"}{"+str(edu["Location"])+"}{"+str(edu["Degree"])+"}{"+str(edu["Started"])+" - "+str(edu["Completed"])+"} \n\n\n"
         
         edustring+="Relevant Courses: "
-        classes=db.execute("SELECT * FROM Classes WHERE IsCSy=1 ORDER BY Number DESC").fetchall()
+        classes=db.execute("SELECT * FROM Classes WHERE IsCSy=1 AND Number>200 ORDER BY Number DESC").fetchall()
         for c in classes:
             edustring+=c["Name"]+", "
         edustring=edustring[:-2]+"\n\n"
@@ -78,7 +44,7 @@ def print_education():
 
 def print_work():
     workstring="\n\\resheading{Work Experience}\n\\begin{description}\n"
-    works=db.execute("SELECT * FROM Experience WHERE Type='Work'")
+    works=db.execute("SELECT * FROM Experience WHERE Type='Work' AND isKGIy=1")
     for work in works:  
         workstring+="\\item\n\\ressubheading{"+str(work["Place"])+"}{"+str(work["Location"])+"}{"+str(work["Position"])+"}{"+str(work["Started"])+" - "+str(work["Completed"])+"} \n\n\n"
         workstring+=str(work["Desc"])+"\n\n"
